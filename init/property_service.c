@@ -102,6 +102,7 @@ struct {
     { "persist.service.bdroid.", AID_BLUETOOTH,   0 },
     { "selinux."         , AID_SYSTEM,   0 },
     { "net.pdp",          AID_RADIO,    AID_RADIO },
+    { "service.bootanim.exit", AID_GRAPHICS, 0 },
 #ifdef PROPERTY_PERMS_APPEND
 PROPERTY_PERMS_APPEND
 #endif
