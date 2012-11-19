@@ -30,6 +30,10 @@ endif
 # Enable ueventd logging
 #LOCAL_CFLAGS += -DLOG_UEVENTS=1
 
+ifeq ($(BOARD_WANTS_EMMC_BOOT),true)
+LOCAL_CFLAGS += -DWANTS_EMMC_BOOT
+endif
+
 LOCAL_MODULE:= init
 
 LOCAL_FORCE_STATIC_EXECUTABLE := true
