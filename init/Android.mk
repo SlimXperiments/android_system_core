@@ -15,9 +15,8 @@ LOCAL_SRC_FILES:= \
 	init_parser.c \
 	ueventd.c \
 	ueventd_parser.c \
-	watchdogd.c
-
-LOCAL_CFLAGS    += -Wno-unused-parameter
+	watchdogd.c \
+	vendor_init.c
 
 ifeq ($(strip $(INIT_BOOTCHART)),true)
 LOCAL_SRC_FILES += bootchart.c
@@ -74,7 +73,9 @@ LOCAL_STATIC_LIBRARIES := \
 	libmincrypt \
 	libext4_utils_static
 
-LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
+ifneq ($(strip $(TARGET_INIT_VENDOR_LIB)),)
+LOCAL_WHOLE_STATIC_LIBRARIES += $(TARGET_INIT_VENDOR_LIB)
+endif
 
 include $(BUILD_EXECUTABLE)
 
