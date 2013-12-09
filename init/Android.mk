@@ -29,10 +29,6 @@ endif
 # Enable ueventd logging
 #LOCAL_CFLAGS += -DLOG_UEVENTS=1
 
-ifeq ($(BOARD_WANTS_EMMC_BOOT),true)
-LOCAL_CFLAGS += -DWANTS_EMMC_BOOT
-endif
-
 ifneq ($(TARGET_NO_INITLOGO),true)
 LOCAL_SRC_FILES += logo.c
 LOCAL_CFLAGS    += -DINITLOGO
@@ -40,6 +36,10 @@ endif
 
 ifneq ($(TARGET_NR_SVC_SUPP_GIDS),)
 LOCAL_CFLAGS += -DNR_SVC_SUPP_GIDS=$(TARGET_NR_SVC_SUPP_GIDS)
+endif
+
+ifeq ($(BOARD_WANTS_EMMC_BOOT),true)
+LOCAL_CFLAGS += -DWANTS_EMMC_BOOT
 endif
 
 ifeq ($(BOARD_USE_NO_DEVFS_SETUP),true)
