@@ -1079,6 +1079,7 @@ static int log_callback(int type, const char *fmt, ...)
     klog_vwrite(level, fmt, ap);
     va_end(ap);
     return 0;
+}
 
 static int charging_mode_booting(void)
 {
