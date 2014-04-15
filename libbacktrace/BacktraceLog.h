@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 The Android Open Source Project
+ * Copyright (C) 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-#include <healthd.h>
+#ifndef _LIBBACKTRACE_BACKTRACE_LOG_H
+#define _LIBBACKTRACE_BACKTRACE_LOG_H
 
-void healthd_board_init(struct healthd_config*)
-{
-    // use defaults
-}
+#define LOG_TAG "libbacktrace"
 
+#include <log/log.h>
 
-int healthd_board_battery_update(struct android::BatteryProperties*)
-{
-    // return 0 to log periodic polled battery status to kernel log
-    return 0;
-}
+// Macro to log the function name along with the warning message.
+#define BACK_LOGW(format, ...) \
+  ALOGW("%s: " format, __PRETTY_FUNCTION__, ##__VA_ARGS__)
+
+#endif // _LIBBACKTRACE_BACKTRACE_LOG_H

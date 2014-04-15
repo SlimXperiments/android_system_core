@@ -34,6 +34,7 @@
 #include "CommandListener.h"
 #include "LogBuffer.h"
 #include "LogListener.h"
+#include "LogAudit.h"
 
 static int drop_privs() {
     struct sched_param param;
@@ -63,7 +64,10 @@ static int drop_privs() {
     capheader.pid = 0;
 
     capdata[CAP_TO_INDEX(CAP_SYSLOG)].permitted = CAP_TO_MASK(CAP_SYSLOG);
-    capdata[CAP_TO_INDEX(CAP_SYSLOG)].effective = CAP_TO_MASK(CAP_SYSLOG);
+    capdata[CAP_TO_INDEX(CAP_AUDIT_CONTROL)].permitted |= CAP_TO_MASK(CAP_AUDIT_CONTROL);
+
+    capdata[0].effective = capdata[0].permitted;
+    capdata[1].effective = capdata[1].permitted;
     capdata[0].inheritable = 0;
     capdata[1].inheritable = 0;
 
@@ -80,6 +84,13 @@ static int drop_privs() {
 // space logger.  Additional transitory per-client threads are created
 // for each reader once they register.
 int main() {
+    int fdDmesg = -1;
+    char dmesg[PROPERTY_VALUE_MAX];
+    property_get("logd.auditd.dmesg", dmesg, "1");
+    if (atol(dmesg)) {
+        fdDmesg = open("/dev/kmsg", O_WRONLY);
+    }
+
     if (drop_privs() != 0) {
         return -1;
     }
@@ -125,6 +136,17 @@ int main() {
     CommandListener *cl = new CommandListener(logBuf, reader, swl);
     if (cl->startListener()) {
         exit(1);
+    }
+
+    // LogAudit listens on NETLINK_AUDIT socket for selinux
+    // initiated log messages. New log entries are added to LogBuffer
+    // and LogReader is notified to send updates to connected clients.
+
+    // failure is an option ... messages are in dmesg (required by standard)
+    LogAudit *al = new LogAudit(logBuf, reader, fdDmesg);
+    if (al->startListener()) {
+        delete al;
+        close(fdDmesg);
     }
 
     pause();

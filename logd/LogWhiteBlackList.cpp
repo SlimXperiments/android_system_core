@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#ifdef USERDEBUG_BUILD
-
 #include <ctype.h>
 
 #include <utils/String8.h>
@@ -49,7 +47,7 @@ void Prune::format(char **strp) {
 }
 
 PruneList::PruneList()
-        : mWorstUidEnabled(true) {
+        : mWorstUidEnabled(false) {
     mNaughty.clear();
     mNice.clear();
 }
@@ -239,5 +237,3 @@ bool PruneList::nice(LogBufferElement *element) {
     }
     return false;
 }
-
-#endif // USERDEBUG_BUILD
