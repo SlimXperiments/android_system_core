@@ -10,6 +10,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 ## Crippled version without an RSA implementation
 ## to coexist with libcrypto_static and provide SHA_hash
+
 include $(CLEAR_VARS)
 LOCAL_MODULE := libminshacrypt
 LOCAL_SRC_FILES := sha.c sha256.c

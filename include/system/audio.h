@@ -190,6 +190,7 @@ typedef enum {
     AUDIO_FORMAT_MP2                 = 0x15000000UL,
     AUDIO_FORMAT_EVRCNW              = 0x16000000UL,
     AUDIO_FORMAT_PCM_OFFLOAD         = 0x17000000UL,
+
 #endif
     AUDIO_FORMAT_MAIN_MASK           = 0xFF000000UL,
     AUDIO_FORMAT_SUB_MASK            = 0x00FFFFFFUL,
@@ -415,7 +416,10 @@ enum {
 #ifdef QCOM_HARDWARE
     AUDIO_DEVICE_OUT_FM                        = 0x80000,
     AUDIO_DEVICE_OUT_FM_TX                     = 0x100000,
+<<<<<<< HEAD
     AUDIO_DEVICE_OUT_SPDIF                     = 0x200000,
+=======
+>>>>>>> github/kk4.4
 #endif
     AUDIO_DEVICE_OUT_DEFAULT                   = AUDIO_DEVICE_BIT_DEFAULT,
     AUDIO_DEVICE_OUT_ALL      = (AUDIO_DEVICE_OUT_EARPIECE |
@@ -440,7 +444,10 @@ enum {
 #ifdef QCOM_HARDWARE
                                  AUDIO_DEVICE_OUT_FM |
                                  AUDIO_DEVICE_OUT_FM_TX |
+<<<<<<< HEAD
                                  AUDIO_DEVICE_OUT_SPDIF |
+=======
+>>>>>>> github/kk4.4
 #endif
                                  AUDIO_DEVICE_OUT_DEFAULT),
     AUDIO_DEVICE_OUT_ALL_A2DP = (AUDIO_DEVICE_OUT_BLUETOOTH_A2DP |
@@ -747,6 +754,22 @@ static inline bool audio_is_valid_format(audio_format_t format)
     case AUDIO_FORMAT_HE_AAC_V1:
     case AUDIO_FORMAT_HE_AAC_V2:
     case AUDIO_FORMAT_VORBIS:
+#ifdef QCOM_HARDWARE
+    case AUDIO_FORMAT_QCELP:
+    case AUDIO_FORMAT_EVRC:
+    case AUDIO_FORMAT_EVRCB:
+    case AUDIO_FORMAT_EVRCWB:
+    case AUDIO_FORMAT_AC3:
+    case AUDIO_FORMAT_EAC3:
+    case AUDIO_FORMAT_AAC_ADIF:
+    case AUDIO_FORMAT_WMA:
+    case AUDIO_FORMAT_WMA_PRO:
+    case AUDIO_FORMAT_DTS:
+    case AUDIO_FORMAT_DTS_LBR:
+    case AUDIO_FORMAT_AMR_WB_PLUS:
+    case AUDIO_FORMAT_MP2:
+    case AUDIO_FORMAT_EVRCNW:
+#endif
         return true;
 #ifdef QCOM_HARDWARE
     case AUDIO_FORMAT_QCELP:
@@ -782,11 +805,14 @@ static inline bool audio_is_linear_pcm(audio_format_t format)
 }
 
 #ifdef QCOM_HARDWARE
+<<<<<<< HEAD
 static inline bool audio_is_offload_pcm(audio_format_t format)
 {
     return ((format & AUDIO_FORMAT_MAIN_MASK) == AUDIO_FORMAT_PCM_OFFLOAD);
 }
 
+=======
+>>>>>>> github/kk4.4
 static inline bool audio_is_supported_compressed(audio_format_t format)
 {
     if (format == AUDIO_FORMAT_AMR_NB ||
@@ -801,6 +827,7 @@ static inline bool audio_is_supported_compressed(audio_format_t format)
     else
         return false;
 }
+<<<<<<< HEAD
 
 static inline bool audio_is_compress_capture_format(audio_format_t format)
 {
@@ -823,6 +850,8 @@ static inline bool audio_is_compress_voip_format(audio_format_t format)
     else
         return false;
 }
+=======
+>>>>>>> github/kk4.4
 #endif
 
 static inline size_t audio_bytes_per_sample(audio_format_t format)
