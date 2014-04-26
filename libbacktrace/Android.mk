@@ -46,10 +46,6 @@ libbacktrace_shared_libraries_target := \
 	libcutils \
 	libgccdemangle \
 
-# To enable using libunwind on each arch, add it to this list.
-libunwind_architectures := arm arm64 mips x86 x86_64
-
-ifeq ($(TARGET_ARCH),$(filter $(TARGET_ARCH),$(libunwind_architectures)))
 libbacktrace_src_files += \
 	UnwindCurrent.cpp \
 	UnwindMap.cpp \
@@ -67,24 +63,6 @@ libbacktrace_shared_libraries_host := \
 
 libbacktrace_static_libraries_host := \
 	libcutils \
-
-else
-libbacktrace_src_files += \
-	Corkscrew.cpp \
-
-libbacktrace_c_includes := \
-	system/core/libcorkscrew \
-
-libbacktrace_shared_libraries := \
-	libcorkscrew \
-
-libbacktrace_shared_libraries_target += \
-	libdl \
-
-libbacktrace_ldlibs_host := \
-	-ldl \
-
-endif
 
 module := libbacktrace
 module_tag := optional
@@ -119,13 +97,7 @@ backtrace_test_cflags := \
 	-O0 \
 	-g \
 	-DGTEST_HAS_STD_STRING \
-
-ifneq ($(TARGET_ARCH),arm64)
-backtrace_test_cflags += -fstack-protector-all
-else
-  $(info TODO: $(LOCAL_PATH)/Android.mk -fstack-protector not yet available for the AArch64 toolchain)
-  common_cflags += -fno-stack-protector
-endif # arm64
+	-fstack-protector-all \
 
 backtrace_test_cflags_target := \
 	-DGTEST_OS_LINUX_ANDROID \
