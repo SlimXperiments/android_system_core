@@ -100,6 +100,7 @@ static int lookup_keyword(const char *s)
         if (!strcmp(s, "omainname")) return K_domainname;
         break;
     case 'e':
+        if (!strcmp(s, "nable")) return K_enable;
         if (!strcmp(s, "xec")) return K_exec;
         if (!strcmp(s, "xport")) return K_export;
         if (!strcmp(s, "xport_rc")) return K_export_rc;
