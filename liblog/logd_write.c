@@ -55,12 +55,15 @@ static int (*write_to_log)(log_id_t, struct iovec *vec, size_t nr) = __write_to_
 static pthread_mutex_t log_init_lock = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-#define UNUSED  __attribute__((__unused__))
+#ifndef __unused
+#define __unused  __attribute__((__unused__))
+#endif
 
-static int logd_fd = -1;
 #if FAKE_LOG_DEVICE
 #define WEAK __attribute__((weak))
 static int log_fds[(int)LOG_ID_MAX] = { -1, -1, -1, -1, -1 };
+#else
+static int logd_fd = -1;
 #endif
 
 /*
@@ -83,12 +86,14 @@ int __android_log_dev_available(void)
     return (g_log_status == kLogAvailable);
 }
 
+#if !FAKE_LOG_DEVICE
 /* give up, resources too limited */
-static int __write_to_log_null(log_id_t log_fd UNUSED, struct iovec *vec UNUSED,
-                               size_t nr UNUSED)
+static int __write_to_log_null(log_id_t log_fd __unused, struct iovec *vec __unused,
+                               size_t nr __unused)
 {
     return -1;
 }
+#endif
 
 #ifdef HTCLOG
 signed int __htclog_read_masks(char *buf, signed int len)
