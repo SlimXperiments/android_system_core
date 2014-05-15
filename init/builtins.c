@@ -34,7 +34,6 @@
 #include <linux/loop.h>
 #include <cutils/partition_utils.h>
 #include <cutils/android_reboot.h>
-#include <sys/system_properties.h>
 #include <fs_mgr.h>
 #include <fts.h>
 
