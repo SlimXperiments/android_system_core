@@ -94,6 +94,7 @@ struct {
     { "service.adb.root", AID_SHELL,    0 },
     { "service.adb.tcp.port", AID_SHELL,    0 },
     { "persist.mmac.", AID_SYSTEM, 0 },
+    { "persist.logd.size",AID_SYSTEM,   0 },
     { "persist.sys.",     AID_SYSTEM,   0 },
     { "persist.service.", AID_SYSTEM,   0 },
     { "persist.service.", AID_RADIO,    0 },
