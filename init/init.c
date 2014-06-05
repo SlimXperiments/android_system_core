@@ -968,24 +968,21 @@ static int bootchart_init_action(int nargs, char **args)
 
 static const struct selinux_opt seopts_prop[] = {
         { SELABEL_OPT_PATH, "/property_contexts" },
+        { SELABEL_OPT_PATH, "/data/security/current/property_contexts" },
         { 0, NULL }
 };
 
 struct selabel_handle* selinux_android_prop_context_handle(void)
 {
-    int i = 0;
-    struct selabel_handle* sehandle = NULL;
-    while ((sehandle == NULL) && seopts_prop[i].value) {
-        sehandle = selabel_open(SELABEL_CTX_ANDROID_PROP, &seopts_prop[i], 1);
-        i++;
-    }
-
+    int policy_index = selinux_android_use_data_policy() ? 1 : 0;
+    struct selabel_handle* sehandle = selabel_open(SELABEL_CTX_ANDROID_PROP,
+                                                   &seopts_prop[policy_index], 1);
     if (!sehandle) {
         ERROR("SELinux:  Could not load property_contexts:  %s\n",
               strerror(errno));
         return NULL;
     }
-    INFO("SELinux: Loaded property contexts from %s\n", seopts_prop[i - 1].value);
+    INFO("SELinux: Loaded property contexts from %s\n", seopts_prop[policy_index].value);
     return sehandle;
 }
 
@@ -998,6 +995,7 @@ void selinux_init_all_handles(void)
 
 static bool selinux_is_disabled(void)
 {
+#ifdef ALLOW_DISABLE_SELINUX
     char tmp[PROP_VALUE_MAX];
 
     if (access("/sys/fs/selinux", F_OK) != 0) {
@@ -1011,12 +1009,14 @@ static bool selinux_is_disabled(void)
         /* SELinux is compiled into the kernel, but we've been told to disable it. */
         return true;
     }
+#endif
 
     return false;
 }
 
 static bool selinux_is_enforcing(void)
 {
+#ifdef ALLOW_DISABLE_SELINUX
     char tmp[PROP_VALUE_MAX];
 
     if (property_get("ro.boot.selinux", tmp) == 0) {
@@ -1033,6 +1033,7 @@ static bool selinux_is_enforcing(void)
         ERROR("SELinux: Unknown value of ro.boot.selinux. Got: \"%s\". Assuming enforcing.\n", tmp);
     }
 
+#endif
     return true;
 }
 
